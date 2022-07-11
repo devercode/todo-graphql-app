@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import baseFetch from "../../../common/services/liferay/api";
 import Layout from "../../../common/components/layout";
 import { getUserEmailAddress } from "../../../common/services/liferay/ThemeDisplay";
+import { useQuery } from "@apollo/client";
+import { GET_TODO_QUERY } from "../../../common/services/liferay/graphql/query";
 
 const HelloWorld = () => {
   const [todos, setTodos] = useState([]);
   const [task, setTask] = useState("");
-
+  const { loading, error, data } = useQuery(GET_TODO_QUERY);
+  console.log(data);
   useEffect(() => {
     getData();
   }, []);
@@ -14,6 +17,7 @@ const HelloWorld = () => {
   const getData = () => {
     baseFetch("o/c/todos")
       .then(({ items = [] }) => {
+        console.log(items);
         setTodos(items);
       })
       .catch(console.error);
